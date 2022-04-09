@@ -19,5 +19,6 @@ Steps to setup the project -
 	and then run "npm run server" to start service on port 4000
 4. Open another terminal/command prompt, go to project location 
 	and run "npm start" command to start web app on port 3000
-5.open "http://localhost:3000/" url to open the webpage.
+5. Open "http://localhost:3000/" url to open the webpage.
+6. Upload data from "Test Files" Folder
 
