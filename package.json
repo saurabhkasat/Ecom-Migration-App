@@ -26,7 +26,7 @@
     "mocha": "^9.2.2"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "react-scripts start --port 3000",
     "build": "react-scripts build",
     "test": "mocha service/test/test.js",
     "eject": "react-scripts eject",

@@ -1,5 +1,5 @@
 //Require the dev-dependencies
-const { json } = require('body-parser');
+// const { json } = require('body-parser');
 let chai = require('chai');
 let chaiHttp = require('chai-http');
 // let server = require('../server');
@@ -13,7 +13,7 @@ describe('Books', () => {
     /*
       * Test the /GET route
       */
-    describe('/GET Orders test total order count should be greater than -1 & page 1 should return orders between 0 to 10 as the page size is passed to 10', () => {
+    describe('/GET Orders - test total order count should be greater than -1 & page 1 should return orders between 0 to 10 as the page size is passed to 10', () => {
         it('it should GET first 10 orders', (done) => {
             chai.request(server)
                 .get('/orders?pn=1&ps=10')

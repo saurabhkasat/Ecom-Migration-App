@@ -1,0 +1,20 @@
+version: '1'
+services:  
+    ui:
+        build:
+            context: ./
+            dockerfile: Dockerfile
+        volumes:
+            - /app/node_modules
+            - ./:/app
+        ports:
+            - "3000:3000"
+    service:
+        build:
+            context: ./
+            dockerfile: Dockerfile.service
+        volumes:
+            - /app/node_modules
+            - ./:/app
+        ports:
+            - "4000:4000"
