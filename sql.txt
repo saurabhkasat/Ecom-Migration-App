@@ -99,8 +99,17 @@ CREATE OR REPLACE FUNCTION dbo.update_nric(
     VOLATILE PARALLEL UNSAFE
 AS $BODY$
 BEGIN
-	update dbo.orders set nric = null where nric in (
-		select nric from  dbo.orders group by nric having count(*) > 1
+	--Update duplicate NRICs
+	UPDATE dbo.orders SET nric = null where uid in (
+		select uid from (
+		select nric, uid, ROW_NUMBER() OVER(
+			PARTITION BY nric
+			ORDER BY uid
+		)as r
+		from dbo.orders where nric in (
+			select nric from  dbo.orders  group by nric having count(*) > 1
+		) 
+		)t where r > 1
 	);
 		
 	update dbo.orders set nric =dbo.generate_nric() where nric is null;
@@ -115,6 +124,7 @@ $BODY$;
 
 ALTER FUNCTION dbo.update_nric()
     OWNER TO postgres;
+
 
 
 -- FUNCTION: dbo.save_orders(json)
@@ -170,7 +180,7 @@ BEGIN
 		"Total Cost", "Total Profit"
 		FROM dbo.orders o WHERE o.nric is not null
 		ORDER BY uid 
-		DESC OFFSET (pagenumber-1)*pagesize 
+		OFFSET (pagenumber-1)*pagesize 
 		LIMIT pagesize
 	);
 	
@@ -179,3 +189,4 @@ $BODY$;
 
 ALTER FUNCTION dbo.get_orders(integer, integer)
     OWNER TO postgres;
+

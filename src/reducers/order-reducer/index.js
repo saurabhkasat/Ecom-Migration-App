@@ -9,7 +9,7 @@ const initialState = {
     pageSize: 0
 }
 
-export default (state = initialState, { type, data }) => {
+export default function OrderReducer(state = initialState, { type, data }) {
     switch (type) {
         case Types.GET_ORDERS:
             return {

@@ -50,14 +50,15 @@ const Fileupload = (props) => {
                 setIsLoading(false);
             },
             error: function (err, file, inputElem, reason) {
-                 //We can craete a genetric component to show all errors/messages.
-                 alert(`Parsing csv file failed : ${err}`)
+                //We can craete a genetric component to show all errors/messages.
+                alert(`Parsing csv file failed : ${err}`)
             },
         });
     };
 
     return (
         <div className='file-upload-block'>
+
             {/* File Uploader */}
             <input
                 type="file"
@@ -65,11 +66,18 @@ const Fileupload = (props) => {
                 id="file"
                 onChange={changeHandler}
                 accept=".csv"
-                style={{ display: "block", margin: "10px auto" }}
+                style={{ display: "block", margin: "5px auto" }}
                 disabled={isLoading}
             />
-            <label htmlFor="file" className="btn-2">Upload</label>
-            {(orderCount.valid + orderCount.invalid) > 0 && <div>{`Valid orders #${orderCount.valid} being uploaded & invalid orders #${orderCount.invalid} `}</div>}
+            <label htmlFor="file" className="btn-3">Upload File
+                {isLoading && <div className='file-upload-loader'>
+                    <span className='loader-icon'>
+                    </span>
+                </div>
+                }
+            </label>
+            {(orderCount.valid + orderCount.invalid) > 0 &&
+                <div className="alert alert-info">{`Valid orders #${orderCount.valid} being uploaded & invalid orders #${orderCount.invalid} `}</div>}
         </div>
     )
 }

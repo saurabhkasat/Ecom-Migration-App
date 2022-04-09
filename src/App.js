@@ -8,7 +8,6 @@ function App() {
     <div className="App">
       <Fileupload />
       <Orders />
-      {/* {isLoading ? <div className='loader'><div className='loader-icon' /> </div> : ''} */}
     </div>
   );
 }
