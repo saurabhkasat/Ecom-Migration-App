@@ -11,6 +11,8 @@ CREATE DATABASE "Ecom"
     TABLESPACE = pg_default
     CONNECTION LIMIT = -1;
 
+--Run below queries in Ecom database -
+
 -- SCHEMA: dbo
 
 -- DROP SCHEMA IF EXISTS dbo ;
