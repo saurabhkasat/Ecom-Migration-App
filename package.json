@@ -20,10 +20,15 @@
     "underscore": "^1.13.2",
     "web-vitals": "^2.1.4"
   },
+  "devDependencies": {
+    "chai": "^4.3.6",
+    "chai-http": "^4.3.0",
+    "mocha": "^9.2.2"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "mocha service/test/test.js",
     "eject": "react-scripts eject",
     "server": "node service/index"
   },

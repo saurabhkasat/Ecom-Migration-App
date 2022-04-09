@@ -27,7 +27,7 @@ module.exports = class Order {
             const query = `select * From dbo.save_orders('${rows}')`;
             result = await pool.query(query);
             await pool.end();
-            return result.rows;
+            return true;
         }
         catch (error) {
             await pool.end();
