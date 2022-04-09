@@ -1,9 +1,10 @@
 
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import Papa from "papaparse";
 import _ from 'underscore';
 import OrdersApi from '../apis/modules/orders'
-
+import { getOrders } from '../actions/order';
 
 const validateObject = (obj, keys) => {
     const emptyKeys = keys.find(key => (obj[key] === ''))
@@ -12,19 +13,21 @@ const validateObject = (obj, keys) => {
 
 const Fileupload = (props) => {
 
-    const [orderCount, setOderCount] = useState({valid : 0, invalid : 0});
+    const [orderCount, setOderCount] = useState({ valid: 0, invalid: 0 });
+    const [isLoading, setIsLoading] = useState(false);
+
+    const dispatch = useDispatch();
 
     const changeHandler = (event) => {
-        props.setLoading(true);
-
+        setIsLoading(true);
         Papa.parse(event.target.files[0], {
             header: true,
             skipEmptyLines: true,
             complete: async (results) => {
                 const keys = _.filter(Object.keys(results.data[0]), item => item !== "")
                 const validData = _.filter(results.data, item => validateObject(item, keys))
-                setOderCount({valid :  validData.length, invalid : results.data.length - validData.length})
-                //Added chunk size upload to handle large JSON error.
+                setOderCount({ valid: validData.length, invalid: results.data.length - validData.length })
+                //Uploading data in chunks to handle large JSON error, 
                 const chunckSize = 500000;
                 let iteration = 0;
                 while ((chunckSize * iteration) < validData.length) {
@@ -41,10 +44,14 @@ const Fileupload = (props) => {
 
                     iteration++;
                 }
-
-                props.setLoading(false);
-                setOderCount({valid : 0, invalid : 0})
+                dispatch(getOrders());
+                setOderCount({ valid: 0, invalid: 0 })
                 event.target.value = null;
+                setIsLoading(false);
+            },
+            error: function (err, file, inputElem, reason) {
+                 //We can craete a genetric component to show all errors/messages.
+                 alert(`Parsing csv file failed : ${err}`)
             },
         });
     };
@@ -59,9 +66,10 @@ const Fileupload = (props) => {
                 onChange={changeHandler}
                 accept=".csv"
                 style={{ display: "block", margin: "10px auto" }}
+                disabled={isLoading}
             />
             <label htmlFor="file" className="btn-2">Upload</label>
-            {(orderCount.valid  + orderCount.invalid) > 0 && <div>{`Valid orders #${orderCount.valid} being uploaded & invalid orders #${orderCount.invalid} `}</div>}
+            {(orderCount.valid + orderCount.invalid) > 0 && <div>{`Valid orders #${orderCount.valid} being uploaded & invalid orders #${orderCount.invalid} `}</div>}
         </div>
     )
 }

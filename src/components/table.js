@@ -7,8 +7,7 @@ const Table = ({
     fetchData,
     loading,
     pageCount: controlledPageCount,
-    totalRows,
-    isLoading
+    totalRows
 }) => {
     const {
         getTableProps,
@@ -40,12 +39,6 @@ const Table = ({
     React.useEffect(() => {
         fetchData({ pageIndex, pageSize })
     }, [fetchData, pageIndex, pageSize])
-
-    // Listen for changes in isLoading prop, to fetch data/get row count once upload is complete.
-    React.useEffect(() => {
-        if (isLoading === false)
-            fetchData({ pageIndex, pageSize })
-    }, [isLoading])
 
     return (
         < >

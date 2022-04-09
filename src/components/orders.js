@@ -1,47 +1,31 @@
-import React from 'react'
+import React, { useRef } from 'react'
+import { useSelector, useDispatch } from 'react-redux';
 import Table from './table'
-import OrdersApi from '../apis/modules/orders'
 import { columns } from '../constants/order-columns'
+import { getOrders } from '../actions/order';
 
 const Orders = (props) => {
-  const [data, setData] = React.useState([])
-  const [loading, setLoading] = React.useState(false)
-  const [pageCount, setPageCount] = React.useState(0)
-  const [totalRows, setTotalRows] = React.useState(0)
-
+  const data = useSelector((state) => state.orders);
+  const dispatch = useDispatch();
   const fetchIdRef = React.useRef(0)
 
   const fetchData = React.useCallback(({ pageSize, pageIndex }) => {
     const fetchId = ++fetchIdRef.current
-
-    setLoading(true)
-
     setTimeout(async () => {
       if (fetchId === fetchIdRef.current) {
-        const result = await OrdersApi.getOrders(pageIndex + 1, pageSize)
-        if (result.ok) {
-          setData(result.data.rows)
-          setPageCount(Math.ceil(result.data.totalRows / pageSize))
-          setTotalRows(result.data.totalRows)
-          setLoading(false)
-        }
-        else {
-          //We can craete a genetric component to show all errors/messages.
-          alert(`Error occured while fetching data`);
-        }
+        dispatch(getOrders(pageIndex + 1, pageSize));
       }
     }, 1000)
-  }, [])
+  }, []);
 
   return (
     <Table
       columns={columns}
-      data={data}
+      data={data.rows}
       fetchData={fetchData}
-      loading={loading}
-      pageCount={pageCount}
-      totalRows={totalRows}
-      isLoading = {props.isLoading}
+      loading={data.loading}
+      pageCount={data.pageCount}
+      totalRows={data.totalRows}
     />
   )
 }
