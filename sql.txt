@@ -48,6 +48,22 @@ TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS dbo.orders
     OWNER to postgres;
+-- Index: orders_nric_idx
+
+-- DROP INDEX IF EXISTS dbo.orders_nric_idx;
+
+CREATE INDEX IF NOT EXISTS orders_nric_idx
+    ON dbo.orders USING btree
+    (nric COLLATE pg_catalog."default" ASC NULLS LAST)
+    TABLESPACE pg_default;
+-- Index: orders_uid_idx
+
+-- DROP INDEX IF EXISTS dbo.orders_uid_idx;
+
+CREATE INDEX IF NOT EXISTS orders_uid_idx
+    ON dbo.orders USING btree
+    (uid ASC NULLS LAST)
+    TABLESPACE pg_default;
 
 -- FUNCTION: dbo.generate_nric()
 
@@ -75,9 +91,9 @@ BEGIN
 		result := result ||  (SELECT array_to_string(ARRAY(SELECT chr((97  + round(random() * 25)) :: integer) FROM generate_series(1,1)), ''));
 	END IF;
 	
--- 	while (select count(*) from dbo.orders o where o.nric = result) > 0 loop
--- 		result := (select * from  dbo.generate_nric());
--- 	end loop;
+ 	while (select count(*) from dbo.orders o where o.nric = result) > 0 loop
+ 		result := (select * from  dbo.generate_nric());
+ 	end loop;
   return result;
 	
 END;
@@ -85,46 +101,6 @@ $BODY$;
 
 ALTER FUNCTION dbo.generate_nric()
     OWNER TO postgres;
-
-
--- FUNCTION: dbo.update_nric()
-
--- DROP FUNCTION IF EXISTS dbo.update_nric();
-
-CREATE OR REPLACE FUNCTION dbo.update_nric(
-	)
-    RETURNS boolean
-    LANGUAGE 'plpgsql'
-    COST 100
-    VOLATILE PARALLEL UNSAFE
-AS $BODY$
-BEGIN
-	--Update duplicate NRICs
-	UPDATE dbo.orders SET nric = null where uid in (
-		select uid from (
-		select nric, uid, ROW_NUMBER() OVER(
-			PARTITION BY nric
-			ORDER BY uid
-		)as r
-		from dbo.orders where nric in (
-			select nric from  dbo.orders  group by nric having count(*) > 1
-		) 
-		)t where r > 1
-	);
-		
-	update dbo.orders set nric =dbo.generate_nric() where nric is null;
-	
-	while((select count(*) from (select nric from  dbo.orders group by nric having count(*) > 1)t ) > 0) loop
-		return (select * From dbo.update_nric());
-	end loop;
-	return  True;
-	
-END;
-$BODY$;
-
-ALTER FUNCTION dbo.update_nric()
-    OWNER TO postgres;
-
 
 
 -- FUNCTION: dbo.save_orders(json)
@@ -138,21 +114,20 @@ CREATE OR REPLACE FUNCTION dbo.save_orders(
     COST 100
     VOLATILE PARALLEL UNSAFE
 AS $BODY$
-DECLARE flag boolean;
 BEGIN
 	SET DATESTYLE TO 'SQL, MDY';
 
 	INSERT INTO dbo.orders (nric, "Region", "Country", "Item Type", "Sales Channel", "Order Priority", "Order Date", "Order ID", "Ship Date", "Units Sold", "Unit Price", "Unit Cost", "Total Revenue", "Total Cost", "Total Profit")
 	SELECT  dbo.generate_nric(), "Region", "Country", "Item Type", "Sales Channel", "Order Priority", "Order Date", "Order ID", "Ship Date", "Units Sold", "Unit Price", "Unit Cost", "Total Revenue", "Total Cost", "Total Profit"
 	FROM json_populate_recordset(null::dbo.orders, req_jsonText );
--- 	VALUES(req_orderid,req_name );
-	flag := (select * from dbo.update_nric());
+
 	RETURN True;
 END;
 $BODY$;
 
 ALTER FUNCTION dbo.save_orders(json)
     OWNER TO postgres;
+
 
 
 -- FUNCTION: dbo.get_orders(integer, integer)
