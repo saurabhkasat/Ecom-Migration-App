@@ -22,3 +22,7 @@ Steps to setup the project -
 5. Open "http://localhost:3000/" url to open the webpage.
 6. Upload data from "Test Files" Folder
 
+
+
+
+
