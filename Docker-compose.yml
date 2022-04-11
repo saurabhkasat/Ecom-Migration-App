@@ -1,6 +1,6 @@
-version: '1'
+version: '3.9'
 services:  
-    postgres:
+    postgresdb:
         image: postgres:14.1-alpine
         restart: always
         ports:
@@ -27,5 +27,7 @@ services:
         volumes:
             - /app/node_modules
             - ./service:/app
+        links:
+            - "postgresdb"
         ports:
             - "4000:4000"

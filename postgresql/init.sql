@@ -1,6 +1,6 @@
 -- Database: Ecom
 
--- DROP DATABASE IF EXISTS "Ecom";
+DROP DATABASE IF EXISTS "Ecom";
 
 CREATE DATABASE "Ecom"
     WITH 
@@ -13,12 +13,16 @@ CREATE DATABASE "Ecom"
 
 --Run below queries in Ecom database -
 
+\c Ecom
+
 -- SCHEMA: dbo
 
 -- DROP SCHEMA IF EXISTS dbo ;
 
 CREATE SCHEMA IF NOT EXISTS dbo
     AUTHORIZATION postgres;
+
+SET search_path TO dbo,public;
 
 -- Table: dbo.orders
 
