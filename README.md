@@ -5,22 +5,20 @@ Frontend - React
 Service - NodeJS
 Database - Postgresql
 
-Software prerequisite to run this project -
-1. Postgresql
-2. PGAdmin or any other IDE to write postgresql queries
-3. Node & NPM
-4. Visual studio code or any other IDE to open react project
+Run below commands to create docker image and attach them to container -
+1. open Terminal and navigate to app root folder
+2. docker-compose up -d
 
-Steps to setup the project -
-1. Run the database scripts sql.txt.
-2. Open prject in visual studio code.
-3. Open terminal/comman prompt, go to project location 
-	and run "npm i" command to install all required npm packages 
-	and then run "npm run server" to start service on port 4000
-4. Open another terminal/command prompt, go to project location 
-	and run "npm start" command to start web app on port 3000
-5. Open "http://localhost:3000/" url to open the webpage.
-6. Upload data from "Test Files" Folder
+once the step 2 completes, open below url in browser - 
+http://localhost:3000/
+
+To run unit tests, run below commands - 
+1. open Terminal and navigate to service folder
+2. install mocha globally "npm install -g mocha"
+3. install npm packages mentioned in devDependency section in package.json "mocha, chai, chai-http, yarg)
+4. npm run test
+
+Total 2 test cases are setup to unit test node APIs.
 
 
 

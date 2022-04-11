@@ -26,6 +26,8 @@ SET search_path TO dbo,public;
 
 -- Table: dbo.orders
 
+-- Table: dbo.orders
+
 -- DROP TABLE IF EXISTS dbo.orders;
 
 CREATE TABLE IF NOT EXISTS dbo.orders
@@ -45,7 +47,8 @@ CREATE TABLE IF NOT EXISTS dbo.orders
     "Unit Cost" double precision,
     "Total Revenue" double precision,
     "Total Cost" double precision,
-    "Total Profit" double precision
+    "Total Profit" double precision,
+    CONSTRAINT unique_nric UNIQUE (nric)
 )
 
 TABLESPACE pg_default;

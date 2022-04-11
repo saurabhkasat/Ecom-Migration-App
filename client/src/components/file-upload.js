@@ -77,7 +77,7 @@ const Fileupload = (props) => {
                 }
             </label>
             {(orderCount.valid + orderCount.invalid) > 0 &&
-                <div className="alert alert-info">{`Valid orders #${orderCount.valid} being uploaded & invalid orders #${orderCount.invalid} `}</div>}
+                <div className="alert alert-info">{`Uploading ${orderCount.valid} / ${orderCount.valid + orderCount.invalid}, invaid record - # ${orderCount.invalid} `}</div>}
         </div>
     )
 }
