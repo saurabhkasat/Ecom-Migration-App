@@ -45,7 +45,10 @@ const Fileupload = (props) => {
                     iteration++;
                 }
                 dispatch(getOrders());
-                setOderCount({ valid: 0, invalid: 0 })
+                setTimeout(() => {
+                    setOderCount({ valid: 0, invalid: 0 })
+                }, 2000);
+                
                 event.target.value = null;
                 setIsLoading(false);
             },
@@ -77,7 +80,7 @@ const Fileupload = (props) => {
                 }
             </label>
             {(orderCount.valid + orderCount.invalid) > 0 &&
-                <div className="alert alert-info">{`Uploading ${orderCount.valid} / ${orderCount.valid + orderCount.invalid}, invaid record - # ${orderCount.invalid} `}</div>}
+                <div className="alert alert-info">{`Valid record(s) ${orderCount.valid}, Invalid record(s) - # ${orderCount.invalid} `}</div>}
         </div>
     )
 }
