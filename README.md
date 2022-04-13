@@ -1,5 +1,6 @@
 # Ecom-Migration-App
-Software Prereuisite - Docker Desktop
+Software prerequisite - 
+1. Docker Desktop v3.9
 
 Technolgies used to in this project  -
 Frontend - React
